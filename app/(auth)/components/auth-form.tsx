@@ -50,29 +50,23 @@ const AuthForm = ({type}: AuthFormProps) => {
   const [loading, setLoading] = useState<boolean>(false);
   const { formState } = form;
   const router = useRouter();
-  // const session = useSession();
-
-  // useEffect(() => {
-  //   if (session.status === "authenticated") {
-  //     router.push("/");
-  //   }
-  // }, [session.status, router]);
  
-  function onSubmit(values: z.infer<typeof formSchema>) {
+  async function onSubmit(values: z.infer<typeof formSchema>) {
     if (type === "signup") {
       setLoading(true);
-      // axios.post("/api/signup", values)
-      //   .then(() => signIn("credentials", {
-      //     ...values,
-      //     redirect: false
-      //   }))
-      //   .catch((error) => {
-      //     console.log("Something went wrong");
-      //     router.push("/signup");
-      //   })
-      //   .finally(() => {
-      //     setLoading(false);
-      //   })
+      const response = await fetch("/api/signup", {
+        method: "POST",
+        headers: {
+          "Contect-Type": "application/json"
+        },
+        body: JSON.stringify(values)
+      })
+      
+      if (response.ok) {
+        router.push("/");
+      }
+      
+      setLoading(false);
     }
 
     if (type === "signin") {
