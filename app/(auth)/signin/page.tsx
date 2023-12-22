@@ -1,5 +1,7 @@
+import Link from "next/link";
+
 import AuthButton from "../components/auth-button";
-import AuthForm from "../components/auth-form";
+import { providers } from "@/constants";
 
 const SignInPage = () => {
   return (
@@ -7,8 +9,18 @@ const SignInPage = () => {
       <h1 className="font-bold text-3xl">
         Log in
       </h1>
-      <AuthButton />
-      <AuthForm />
+      <div className="flex flex-col gap-4">
+        {providers.map(provider => (
+          <AuthButton 
+            key={provider.title}
+            title={provider.title}
+            logo={provider.logo}
+          />
+        ))}
+      </div>
+      <p className="text-center text-xs">
+        Don't have an account? <Link href="/signup" className="underline">Sign up</Link>
+      </p>
     </div>
   )
 };
