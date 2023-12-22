@@ -2,6 +2,7 @@ import Link from "next/link";
 
 import AuthButton from "../components/auth-button";
 import { providers } from "@/constants";
+import AuthForm from "../components/auth-form";
 
 const SignInPage = () => {
   return (
@@ -18,6 +19,7 @@ const SignInPage = () => {
           />
         ))}
       </div>
+      <AuthForm type="signin" />
       <p className="text-center text-xs">
         Don't have an account? <Link href="/signup" className="underline">Sign up</Link>
       </p>
