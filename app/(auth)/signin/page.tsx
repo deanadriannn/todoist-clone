@@ -24,6 +24,7 @@ const SignInPage = async () => {
             key={provider.title}
             title={provider.title}
             logo={provider.logo}
+            provider={provider.provider}
           />
         ))}
       </div>

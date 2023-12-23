@@ -4,10 +4,8 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
 import { AlertCircle } from "lucide-react";
-import axios from "axios";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useRouter } from "next/navigation";
-// import { signIn, useSession } from "next-auth/react";
 import { signIn } from "next-auth/react";
 
 import {
