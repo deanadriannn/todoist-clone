@@ -8,6 +8,7 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 // import { signIn, useSession } from "next-auth/react";
+import { signIn } from "next-auth/react";
 
 import {
   Form,
@@ -57,31 +58,35 @@ const AuthForm = ({type}: AuthFormProps) => {
       const response = await fetch("/api/signup", {
         method: "POST",
         headers: {
-          "Contect-Type": "application/json"
+          "Content-Type": "application/json"
         },
         body: JSON.stringify(values)
       })
       
       if (response.ok) {
-        router.push("/");
+        router.push("/signin");
       }
-      
+
       setLoading(false);
     }
 
     if (type === "signin") {
       setLoading(true);
-      // signIn("credentials", {
-      //   ...values,
-      //   redirect: false
-      // })
-      //   .then(() => {
-      //     router.push("/");
-      //   })
-      //   .catch((error) => {
-      //     console.log(error);
-      //   })
-      //   .finally(() => setLoading(false))
+      const signInData = await signIn('credentials', {
+        email: values.email,
+        password: values.password,
+        redirect: false
+      })
+      
+      if (signInData?.error) {
+        console.log(signInData);
+      }
+
+      if (signInData?.ok) {
+        router.push("/");
+      }
+
+      setLoading(false);
     }
   }
 
