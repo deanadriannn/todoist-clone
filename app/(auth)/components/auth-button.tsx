@@ -19,7 +19,7 @@ const AuthButton = ({ title, logo, provider }: AuthButtonProps) => {
   const signInWith = async (provider: string) => {
     try {
       setLoading(true)
-      await signIn(provider, { callbackUrl: `${window.location.origin}` })
+      await signIn(provider, { callbackUrl: `${window.location.origin}/app` })
         .then(() => {
           console.log('Signed in successfully');
         })

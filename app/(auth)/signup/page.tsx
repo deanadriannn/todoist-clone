@@ -3,16 +3,8 @@ import Link from "next/link";
 import AuthButton from "../components/auth-button";
 import { providers } from "@/constants";
 import AuthForm from "../components/auth-form";
-import { getSession } from "@/lib/get-session";
-import { redirect } from "next/navigation";
 
-const SignUpPage = async () => {
-  const session = await getSession();
-
-  if (session) {
-    redirect("/");
-  }
-
+const SignUpPage = () => {
   return (
     <div className="flex flex-col justify-between gap-12">
       <h1 className="font-bold text-3xl">

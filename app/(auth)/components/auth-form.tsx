@@ -81,7 +81,7 @@ const AuthForm = ({type}: AuthFormProps) => {
       }
 
       if (signInData?.ok) {
-        router.push("/");
+        router.push("/app");
       }
 
       setLoading(false);
