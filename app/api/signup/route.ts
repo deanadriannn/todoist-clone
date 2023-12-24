@@ -5,6 +5,9 @@ import * as z from "zod";
 import prisma from "@/lib/db";
 
 const formSchema = z.object({
+  name: z.string().min(1).max(20, {
+    message: "Name cannot exceed 20 characters"
+  }),
   email: z.string().min(1, {
     message: "Please enter a valid email address"
   }).max(50, {
@@ -21,7 +24,7 @@ export async function POST(req: Request) {
   try {
     const body = await req.json();
 
-    const { email, password } = formSchema.parse(body);
+    const { name, email, password } = formSchema.parse(body);
 
     if (!email || !password) {
       return NextResponse.json({ error: "Invalid credentials"}, { status: 400 })
@@ -41,6 +44,7 @@ export async function POST(req: Request) {
 
     const newUser = await prisma.user.create({
       data: {
+        name,
         email,
         password: hashPassword
       }

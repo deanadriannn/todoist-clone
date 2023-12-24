@@ -7,7 +7,7 @@ export default async function Home() {
 
   return (
     <div>
-      <h1>Hello {session?.user?.email}</h1>
+      <h1>Hello {session?.user?.name}</h1>
       <h1>Hello</h1>
       <SignOut />
     </div>

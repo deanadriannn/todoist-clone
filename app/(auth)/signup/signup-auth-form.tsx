@@ -11,6 +11,7 @@ import { signIn } from "next-auth/react";
 import {
   Form,
   FormControl,
+  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -21,10 +22,17 @@ import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 
 const formSchema = z.object({
+  name: z.string().min(1, {
+    message: "Name must contain at least one character"
+  }).max(20, {
+    message: "Name cannot exceed 20 characters"
+  }),
   email: z.string().min(1, {
     message: "Please enter a valid email address"
   }).max(50, {
     message: "Email cannot exceed 50 characters"
+  }).email({
+    message: "Please enter a valid email address"
   }),
   password: z.string().min(8, {
     message: "Password must contain at least 8 character(s)"
@@ -33,14 +41,11 @@ const formSchema = z.object({
   })
 });
 
-interface AuthFormProps {
-  type: "signin" | "signup"
-}
-
-const AuthForm = ({type}: AuthFormProps) => {
+const SignUpAuthForm = () => {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
+      name: "",
       email: "",
       password: ""
     },
@@ -51,8 +56,8 @@ const AuthForm = ({type}: AuthFormProps) => {
   const router = useRouter();
  
   async function onSubmit(values: z.infer<typeof formSchema>) {
-    if (type === "signup") {
-      setLoading(true);
+    setLoading(true);
+    try {
       const response = await fetch("/api/signup", {
         method: "POST",
         headers: {
@@ -64,26 +69,9 @@ const AuthForm = ({type}: AuthFormProps) => {
       if (response.ok) {
         router.push("/signin");
       }
-
-      setLoading(false);
-    }
-
-    if (type === "signin") {
-      setLoading(true);
-      const signInData = await signIn('credentials', {
-        email: values.email,
-        password: values.password,
-        redirect: false
-      })
-      
-      if (signInData?.error) {
-        console.log(signInData);
-      }
-
-      if (signInData?.ok) {
-        router.push("/app");
-      }
-
+    } catch (error) {
+      console.log(error);
+    } finally {
       setLoading(false);
     }
   }
@@ -93,6 +81,23 @@ const AuthForm = ({type}: AuthFormProps) => {
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
         <FormField
           control={form.control}
+          name="name"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Name</FormLabel>
+              <FormControl>
+                <Input 
+                  placeholder="Enter your name" 
+                  {...field} 
+                  className={cn("focus-visible:ring-transparent", formState.errors.name ? "border-destructive" : "")}
+                />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
           name="email"
           render={({ field }) => (
             <FormItem>
@@ -100,7 +105,6 @@ const AuthForm = ({type}: AuthFormProps) => {
               <FormControl>
                 <Input 
                   id="email"
-                  type="email"
                   placeholder="Enter your email" 
                   {...field}
                   className={cn("focus-visible:ring-transparent", formState.errors.email ? "border-destructive" : "")}
@@ -141,11 +145,11 @@ const AuthForm = ({type}: AuthFormProps) => {
           className="w-full"
           variant="primary"
         >
-          {type === "signin" ? "Log in" : "Sign up with Email"}
+          Sign up with Email
         </Button>
       </form>
     </Form>
   )
 }
 
-export default AuthForm
+export default SignUpAuthForm

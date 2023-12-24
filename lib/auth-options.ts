@@ -37,15 +37,18 @@ export const authOptions: NextAuthOptions = {
           return null;
         }
 
-        const passwordMatch = await compare(credentials.password, existingUser.password);
+        if (existingUser.password) {
+          const passwordMatch = await compare(credentials.password, existingUser.password);
 
-        if (!passwordMatch) {
-          return null;
+          if (!passwordMatch) {
+            return null;
+          }
         }
 
         return {
           id: `${existingUser.id}`,
-          email: existingUser.email
+          email: existingUser.email,
+          name: existingUser.name
         }
       }
     })
@@ -61,7 +64,8 @@ export const authOptions: NextAuthOptions = {
         ...session,
         user: {
           ...session.user,
-          email: token.email
+          email: token.email,
+          name: token.name
         }
       }
     },
@@ -69,7 +73,8 @@ export const authOptions: NextAuthOptions = {
       if (user) {
         return {
           ...token,
-          email: user.email
+          email: user.email,
+          name: user.name
         }
       }
       return token

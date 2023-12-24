@@ -2,7 +2,7 @@ import Link from "next/link";
 
 import AuthButton from "../components/auth-button";
 import { providers } from "@/constants";
-import AuthForm from "../components/auth-form";
+import SignUpAuthForm from "./signup-auth-form";
 
 const SignUpPage = () => {
   return (
@@ -20,7 +20,7 @@ const SignUpPage = () => {
           />
         ))}
       </div>
-      <AuthForm type="signup" />
+      <SignUpAuthForm />
       <p className="text-center text-xs">
         Already signed up? <Link href="/signin" className="underline">Go to login</Link>
       </p>
